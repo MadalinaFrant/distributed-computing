@@ -1,5 +1,3 @@
-Tema 3 APD - Frant Madalina 334CB
-
 Implementarea presupune un vector de vecini cu semnificatia:
     - proces coordonator: vecini = workeri din cluster
     - proces worker: vecin = coordonator
