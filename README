@@ -1,0 +1,65 @@
+Tema 3 APD - Frant Madalina 334CB
+
+Implementarea presupune un vector de vecini cu semnificatia:
+    - proces coordonator: vecini = workeri din cluster
+    - proces worker: vecin = coordonator
+
+Functia is_coord verifica daca procesul dat este de tip coordonator, adica 
+daca acesta apartine intervalului [0, 3]. 
+
+Functia get_neighbours initializeaza vectorul de vecini, citind din fisierul 
+corespunzator workerii din cluster in cazul unui coordonator, iar in cazul 
+unui worker setand dimensiunea vectorului de vecini la 1 (procesele de tip
+worker nu cunosc initial cine este coordonatorul acestora). 
+
+Functia log_message afiseaza mesajul corespunzator transmiterii unui mesaj 
+de la sursa data la destinatia data. Aceasta functie va fi apelata de fiecare 
+data cand se va transmite un mesaj (sau mai multe mesaje odata) de la o anumita 
+sursa la o anumita destinatie. 
+
+
+- Task 1
+
+Functia print_workers afiseaza toti workerii din cluster-ul cu coordonatorul 
+dat. 
+
+Functia print_topology afiseaza intreaga topologie, afisand pentru fiecare 
+coordonator, in ordine, workerii care apartin de acesta. 
+
+Functia gen_topology realizeaza urmatoarele operatii: Procesele coordonator 
+trimit un mesaj catre workerii acestora pentru a-i informa de ce coordonator 
+apartin, acestia asteptand mesajul si actualizand in vectorul de vecini si 
+in topologie valoarea coordonatorului. Un worker apoi trimite aceasta topologie 
+actualizata, iar un coordonator o primeste si isi actualizeaza propria 
+topologie. Astfel, fiecare coordonator cunoaste topologia cluster-ului in 
+care se afla. Pentru a completa topologia cu toate cluster-ele, aceasta se 
+va trimite de la procesul 1 la procesul 0 (1 -> 2 -> 3 -> 0), actualizand 
+valorile din topologie corespunzatoare fiecarui cluster. In acest fel procesul 
+0 va cunoaste intreaga topologie. Deoarece trebuie ca toate procesele sa cunoasca 
+intreaga topologie, aceasta se va trimite catre ceilalti coordonatori de la 
+0 la 3 la 2 la 1, care la randul lor o vor transmite catre workerii acestora. 
+
+
+- Task 2
+
+Functia calculate_vector realizeaza urmatoarele: procesul 0 (care cunoaste 
+dimensiunea vectorului de calculat) genereaza vectorul initial, apoi acesta 
+se trimite catre toate celelalte procese coordonator (0 -> 3 -> 2 -> 1). 
+Fiecare coordonator apoi trimite acest vector impreuna cu dimensiunea sa catre 
+workerii sai. Pentru ca un worker sa realizeze calculele asupra unei portiuni 
+din vector, acesta va primi de la coordonatorul sau limitele intervalului ce 
+va delimita aceasta portiune. Aceste limite sunt calculate in functie de 
+numarul de workeri, numarul de elemente din vector si rang-ul procesului 
+worker - 4 (procesele worker incep de la 4). Dupa finalizarea calculelor, 
+vectorul actualizat este trimis catre coordonator, care il actualizeaza 
+astfel incat va contine vectorul dupa realizarea calculelor corespondente 
+tuturor workerilor sai. In final, vectorul este trimis de la 1 la 2 la 3 la 0, 
+pentru a-l asambla astfel incat sa contina calculele din fiecare cluster. 
+
+
+- Task 3
+
+In cadrul rezolvarilor pentru task-urile 1 si 2 nu s-a folosit legatura 0-1 
+pentru a comunica, deci rezolvarea acestui task este implicita. Comunicarea 
+intre coordonatori se realizeaza fie pe sensul 0 -> 3 -> 2 -> 1, fie pe sensul 
+1 -> 2 -> 3 -> 0, astfel evitand transmiterea mesajelor intre procesele 0 si 1.
